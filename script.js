@@ -1,16 +1,16 @@
 const btnEl = document.getElementById('btn')
 const appEl = document.getElementById('app')
 
-
+// saving a note to loccalstorage
 const saveNote = (notes) =>{
     localStorage.setItem('notes', JSON.stringify(notes))
 }
+// creating an element in DOM (textarea)
 const createNoteEl = (id, content) =>{
     const element = document.createElement('textarea')
     element.classList.add('note')
     element.placeholder = 'Empty Note'
     element.value = content
-    // console.log(id, content);
     element.addEventListener('dblclick', ()=>{
         const warning = confirm('Do you want to delete the note?')
         if(warning){
@@ -23,16 +23,19 @@ const createNoteEl = (id, content) =>{
     return element;
 }
 
+//retrieving notes from localstorage
 const getNotes = () =>{
     return JSON.parse(localStorage.getItem('notes') || "[]")
 }
 
+//looping through the notes to display created element in DOM
 getNotes().forEach((note) =>{
     const noteEl = createNoteEl(note.id, note.content)
     appEl.insertBefore(noteEl, btnEl)
 })
 
 
+// updating the note function
 const updateNote = (id, content) =>{
     const notes = getNotes();
     const target = notes.filter((note)=> note.id == id)[0]
@@ -40,13 +43,14 @@ const updateNote = (id, content) =>{
     saveNote(notes)
 }
 
+// delete note function
 const deleteNote = (id, element) =>{
     const notes = getNotes().filter((note)=> note.id !== id)
     saveNote(notes)
     appEl.removeChild(element)
-    // localStorage.clear()
-}
+    }
 
+//add note function
 const addNote = () =>{
     const notes = getNotes()
     const noteObj = {
@@ -54,7 +58,6 @@ const addNote = () =>{
         content: "",
     }
     const noteEl = createNoteEl(noteObj.id, noteObj.content)
-    // console.log(noteObj);
     appEl.insertBefore(noteEl, btnEl)
     notes.push(noteObj);
 
